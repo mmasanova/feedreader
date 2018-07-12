@@ -108,30 +108,26 @@ $(function() {
         /* Ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
+        let oldContent = '';
         let newContent = '';
         let feed;
 
         beforeEach(function(done) {
             feed = document.querySelector('.feed');
 
-            if (feed !== null) {
-                /* Clear the feed so we can make sure we have new content 
-                 * after the loadFeed function runs
-                 */
-                feed.innerHTML = '';
+            loadFeed(0, function() {
+                oldContent = feed.innerHTML;
 
-                loadFeed(0, function() {
+                loadFeed(1, function() {
                     newContent = feed.innerHTML;
                     done();
                 });
-            } else {
-                done();
-            }
+            });
         });
 
         it('changes content', function(done) {
             expect(feed).not.toBeNull();
-            expect(newContent).not.toBe('');
+            expect(newContent).not.toBe(oldContent);
             done();
         });
     });
